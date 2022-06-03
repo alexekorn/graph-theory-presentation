@@ -67,34 +67,34 @@ class Dijkstra {
         this.dist.set(node.name, 0);
         await graphRenderer.sleepTil();
         while (this.queue.size > 0) {
-            let u = this.getU();
+            const u = this.getU();
             this.queue.delete(u.name);
             await graphRenderer.sleepTil();
 
             for (let uEdge of u.edges) {
-                let v = uEdge.destination;
+                const v = uEdge.destination;
                 if (!this.queue.get(v.name)) {
                     continue;
                 }
                 if (this.dist.get(u.name) === Infinity) {
                     continue;
                 }
-                let potentialDistanceToV = this.dist.get(u.name) + uEdge.weight;
-                graphRenderer.update(this.graph, this.dist, this.prev, this.queue, u, v,
+                const potentialDistanceToV = this.dist.get(u.name) + uEdge.weight;
+                graphRenderer.update(this, u, v,
                     potentialDistanceToV + ' < ' + this.dist.get(v.name));
                 await graphRenderer.sleepTil();
                 if (potentialDistanceToV < this.dist.get(v.name)) {
                     this.dist.set(v.name, potentialDistanceToV);
                     this.prev.set(v.name, u.name);
-                    graphRenderer.update(this.graph, this.dist, this.prev, this.queue, u, v, null);
+                    graphRenderer.update(this, u, v, null);
                     await graphRenderer.sleepTil();
                 }
-                graphRenderer.update(this.graph, this.dist, this.prev, this.queue, u, v, null);
+                graphRenderer.update(this, u, v, null);
                 await graphRenderer.sleepTil();
             }
             await graphRenderer.sleepTil();
         }
-        graphRenderer.update(this.graph, this.dist, this.prev, this.queue, null, null, null);
+        graphRenderer.update(this, null, null, null);
     }
 
     /**

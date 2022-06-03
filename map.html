@@ -36,6 +36,7 @@
     </style>
 </head>
 <body>
+<div id="consoleOutput" style="float: right; width: 300px; font-family: monospace;"></div>
 <div id="graphViz">
     <svg height="500" width="1000" id="graphSvg"><g id="graphSvgG"></g></svg>
 </div>
@@ -53,7 +54,7 @@
      */
 
     const graphRenderer = new GraphRenderer(graph);
-    const width = window.innerWidth - 100;
+    const width = window.innerWidth - 350;
     const height = window.innerHeight - 100;
     const svg = document.getElementById('graphSvg');
     svg.setAttribute('width', width);
@@ -61,10 +62,10 @@
     graphRenderer.render(graph, {
         'Minneapolis': [0.3 * width, 0.3 * height],
         'Rochester': [0.3 * width, 0.5 * height],
-        'Madison': [0.5 * width, 0.5 * height],
+        'Madison': [0.6 * width, 0.6 * height],
         'Des Moines': [0.3 * width, 0.9 * height],
-        'Chicago': [0.9 * width, 0.9 * height],
-        'Milwaukee': [0.9 * width, 0.6 * height],
+        'Chicago': [0.8 * width, 0.9 * height],
+        'Milwaukee': [0.8 * width, 0.6 * height],
         'St Cloud': [0.2 * width, 0.2 * height],
         'Fargo': [0.1 * width, 0.1 * height],
         'Sioux Falls': [0.1 * width, 0.5 * height],

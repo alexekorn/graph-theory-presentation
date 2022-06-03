@@ -9,10 +9,10 @@ class GraphRenderer {
         this.locations = locations;
         let xmlns = "http://www.w3.org/2000/svg";
         for (let nodeName in locations) {
-            let pos = locations[nodeName];
+            const pos = locations[nodeName];
 
             // node el
-            let el = document.createElementNS(xmlns, 'circle');
+            const el = document.createElementNS(xmlns, 'circle');
             el.setAttribute('cx', pos[0]);
             el.setAttribute('cy', pos[1]);
             el.setAttribute('r', 20);
@@ -21,7 +21,7 @@ class GraphRenderer {
             this.el.appendChild(el);
 
             // node distance
-            let elDist = document.createElementNS(xmlns, 'text');
+            const elDist = document.createElementNS(xmlns, 'text');
             elDist.setAttribute('x', pos[0] + 20);
             elDist.setAttribute('y', pos[1] - 20);
             elDist.setAttribute('id', nodeName + 'Dist');
@@ -29,12 +29,12 @@ class GraphRenderer {
             elDist.innerHTML = 'Inf';
             this.el.appendChild(elDist);
 
-            let node = graph.getNodes().get(nodeName);
+            const node = graph.getNodes().get(nodeName);
             for (let edge of node.getEdges()) {
                 if (!locations[edge.destination.name]) {
                     continue;
                 }
-                let lineEl = document.createElementNS(xmlns, 'line');
+                const lineEl = document.createElementNS(xmlns, 'line');
                 const x1 = pos[0];
                 const y1 = pos[1];
                 const x2 = locations[edge.destination.name][0];
@@ -56,11 +56,14 @@ class GraphRenderer {
     }
 
     /**
-     * @param {Map} queue
+     * @param {Dijkstra} dijkstra
      * @param {Node|null} u
      * @param {Node|null} v
      */
-    update(graph, dist, prev, queue, u, v, distOverride) {
+    update(dijkstra, u, v, distOverride) {
+        const graph = dijkstra.graph;
+        const dist = dijkstra.dist;
+        const queue = dijkstra.queue;
         for (let [nodeName,] of graph.getNodes()) {
             let cls = 'node';
             if (u && nodeName === u.name)  {
@@ -77,8 +80,7 @@ class GraphRenderer {
 
         for (let [nodeName, nodeDist] of dist) {
             let html;
-            //debugger;
-            let distEl = document.getElementById(nodeName + 'Dist');
+            const distEl = document.getElementById(nodeName + 'Dist');
             if (distOverride && v && v.name === nodeName) {
                 html = distOverride;
                 distEl.setAttribute('class', 'nodeDist distConsider');
@@ -89,6 +91,8 @@ class GraphRenderer {
             }
             distEl.innerHTML = nodeName + ': ' + html;
         }
+        document.getElementById('consoleOutput').innerHTML
+            = dijkstra.summarizeResults().replaceAll(/\n/g, '<br><br>');
     }
 
     sleepTil() {
