@@ -2,7 +2,7 @@
 
 class GraphRenderer {
     constructor() {
-        this.el = document.getElementById('graphSvg');
+        this.el = document.getElementById('graphSvgG');
     }
 
     render(graph, locations) {

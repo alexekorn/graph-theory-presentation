@@ -37,32 +37,37 @@
 </head>
 <body>
 <div id="graphViz">
-    <svg height="500" width="1000"><g id="graphSvg"></g></svg>
+    <svg height="500" width="1000" id="graphSvg"><g id="graphSvgG"></g></svg>
 </div>
 <button id="nextStep">Next step</button>
 <script>
-    let graph = (new GraphBuilder()).buildGraph();
+    const graph = (new GraphBuilder()).buildGraph();
 
-    let dijkstra = new Dijkstra(graph);
+    const dijkstra = new Dijkstra(graph);
 
-    let minneapolis = graph.getNodes().get('Minneapolis');
+    const minneapolis = graph.getNodes().get('Minneapolis');
 
     /*
     dijkstra.run(minneapolis);
     console.log(dijkstra.summarizeResults());
      */
 
-    let graphRenderer = new GraphRenderer(graph);
+    const graphRenderer = new GraphRenderer(graph);
+    const width = window.innerWidth - 100;
+    const height = window.innerHeight - 100;
+    const svg = document.getElementById('graphSvg');
+    svg.setAttribute('width', width);
+    svg.setAttribute('height', height);
     graphRenderer.render(graph, {
-        'Minneapolis': [200, 200],
-        'Rochester': [200, 300],
-        'Madison': [500, 300],
-        'Des Moines': [200, 400],
-        'Chicago': [800, 400],
-        'Milwaukee': [800, 300],
-        'St Cloud': [100, 100],
-        'Fargo': [25, 35],
-        'Sioux Falls': [25, 300],
+        'Minneapolis': [0.3 * width, 0.3 * height],
+        'Rochester': [0.3 * width, 0.5 * height],
+        'Madison': [0.5 * width, 0.5 * height],
+        'Des Moines': [0.3 * width, 0.9 * height],
+        'Chicago': [0.9 * width, 0.9 * height],
+        'Milwaukee': [0.9 * width, 0.6 * height],
+        'St Cloud': [0.2 * width, 0.2 * height],
+        'Fargo': [0.1 * width, 0.1 * height],
+        'Sioux Falls': [0.1 * width, 0.5 * height],
     });
 
     document.getElementById('nextStep').onclick = function() {
