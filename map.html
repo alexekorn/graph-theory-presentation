@@ -39,7 +39,10 @@
 <div id="graphViz">
     <svg height="500" width="1000"><g id="graphSvg"></g></svg>
 </div>
+<button onclick="nextStep = true;">Next step</button>
 <script>
+    let nextStep = false;
+
     let graph = (new GraphBuilder()).buildGraph();
 
     let dijkstra = new Dijkstra(graph);

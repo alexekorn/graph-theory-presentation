@@ -3,6 +3,17 @@
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+// TODO https://stackoverflow.com/questions/65915371/how-do-i-make-the-program-wait-for-a-button-click-to-go-to-the-next-loop-iterati
+function sleepTil(shouldCompleteFn) {
+    return new Promise(resolve => setTimeout(sleepTilHelper, 100, resolve, shouldCompleteFn));
+}
+function sleepTilHelper(resolve, shouldCompleteFn) {
+    if (shouldCompleteFn()) {
+        resolve();
+        return;
+    }
+    setTimeout(sleepTilHelper, 100, resolve, shouldCompleteFn);
+}
 
 class Dijkstra {
     /**
@@ -49,6 +60,11 @@ class Dijkstra {
 
     async runVisualize(node, renderUpdateFn) {
         this.dist.set(node.name, 0);
+        let sleepTilFn = function() {
+            let result = nextStep;
+            nextStep = false;
+            return result;
+        };
         while (this.queue.size > 0) {
             let u = this.getU();
             this.queue.delete(u.name);
@@ -64,17 +80,17 @@ class Dijkstra {
                 let potentialDistanceToV = this.dist.get(u.name) + uEdge.weight;
                 renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v,
                     potentialDistanceToV + ' < ' + this.dist.get(v.name));
-                await sleep(2000);
+                await sleepTil(sleepTilFn);
                 if (potentialDistanceToV < this.dist.get(v.name)) {
                     this.dist.set(v.name, potentialDistanceToV);
                     this.prev.set(v.name, u.name);
                     renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v);
-                    await sleep(1000);
+                    await sleepTil(sleepTilFn);
                 }
                 renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v);
-                await sleep(1000);
+                await sleepTil(sleepTilFn);
             }
-            await sleep(2000);
+            await sleepTil(sleepTilFn);
         }
         renderUpdateFn(this.graph, this.dist, this.prev, this.queue, null, null);
     }
