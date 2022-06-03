@@ -6,9 +6,9 @@ class Node {
      * @param {String} name
      */
     constructor(graph, name) {
-        graph.registerNode(this);
         this.name = name;
         this.edges = [];
+        graph.registerNode(this);
     }
 
     /**

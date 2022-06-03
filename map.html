@@ -12,9 +12,14 @@
         let minneapolis = new Node(graph, 'Minneapolis');
         let rochester = new Node(graph, 'Rochester');
         let madison = new Node(graph, 'Madison');
+        let desMoines = new Node(graph, 'Des Moines');
+        let chicago = new Node(graph, 'Chicago');
         minneapolis.connect(rochester, 88);
         rochester.connect(madison, 209);
         madison.connect(minneapolis, 273);
+        rochester.connect(desMoines, 212);
+        desMoines.connect(chicago, 333);
+        madison.connect(chicago, 147);
 
         let dijkstra = new Dijkstra(graph);
 
