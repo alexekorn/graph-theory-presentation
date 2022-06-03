@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="src/Graph.js"></script>
+    <script src="src/Node.js"></script>
+    <script src="src/Edge.js"></script>
+    <script src="src/Dijkstra.js"></script>
+    <script>
+        let graph = new Graph();
+        let minneapolis = new Node(graph, 'Minneapolis');
+        let rochester = new Node(graph, 'Rochester');
+        let madison = new Node(graph, 'Madison');
+        minneapolis.connect(rochester, 88);
+        rochester.connect(madison, 209);
+        madison.connect(minneapolis, 273);
+
+        let dijkstra = new Dijkstra(graph);
+
+        dijkstra.run(minneapolis);
+
+        console.log(dijkstra.dist);
+        console.log(dijkstra.prev);
+    </script>
+</head>
+<body>
+
+</body>
+</html>
