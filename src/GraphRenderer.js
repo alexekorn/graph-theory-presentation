@@ -55,41 +55,43 @@ class GraphRenderer {
         }
     }
 
-    getUpdateFn() {
-        /**
-         * @param {Map} queue
-         * @param {Node|null} u
-         * @param {Node|null} v
-         */
-        return function(graph, dist, prev, queue, u, v, distOverride) {
-            for (let [nodeName,] of graph.getNodes()) {
-                let cls = 'node';
-                if (u && nodeName === u.name)  {
-                    cls += ' u';
-                }
-                else if (v && nodeName === v.name)  {
-                    cls += ' v';
-                }
-                else if (!queue.has(nodeName)) {
-                    cls += ' visited';
-                }
-                document.getElementById(nodeName).setAttribute('class', cls);
+    /**
+     * @param {Map} queue
+     * @param {Node|null} u
+     * @param {Node|null} v
+     */
+    update(graph, dist, prev, queue, u, v, distOverride) {
+        for (let [nodeName,] of graph.getNodes()) {
+            let cls = 'node';
+            if (u && nodeName === u.name)  {
+                cls += ' u';
             }
+            else if (v && nodeName === v.name)  {
+                cls += ' v';
+            }
+            else if (!queue.has(nodeName)) {
+                cls += ' visited';
+            }
+            document.getElementById(nodeName).setAttribute('class', cls);
+        }
 
-            for (let [nodeName, nodeDist] of dist) {
-                let html;
-                //debugger;
-                let distEl = document.getElementById(nodeName + 'Dist');
-                if (distOverride && v && v.name === nodeName) {
-                    html = distOverride;
-                    distEl.setAttribute('class', 'nodeDist distConsider');
-                }
-                else {
-                    html = nodeDist;
-                    distEl.setAttribute('class', 'nodeDist');
-                }
-                distEl.innerHTML = nodeName + ': ' + html;
+        for (let [nodeName, nodeDist] of dist) {
+            let html;
+            //debugger;
+            let distEl = document.getElementById(nodeName + 'Dist');
+            if (distOverride && v && v.name === nodeName) {
+                html = distOverride;
+                distEl.setAttribute('class', 'nodeDist distConsider');
             }
-        };
+            else {
+                html = nodeDist;
+                distEl.setAttribute('class', 'nodeDist');
+            }
+            distEl.innerHTML = nodeName + ': ' + html;
+        }
+    }
+
+    sleepTil() {
+        return new Promise(resolve => this.runNextStep = resolve);
     }
 }

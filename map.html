@@ -39,10 +39,8 @@
 <div id="graphViz">
     <svg height="500" width="1000"><g id="graphSvg"></g></svg>
 </div>
-<button onclick="nextStep = true;">Next step</button>
+<button id="nextStep">Next step</button>
 <script>
-    let nextStep = false;
-
     let graph = (new GraphBuilder()).buildGraph();
 
     let dijkstra = new Dijkstra(graph);
@@ -67,8 +65,12 @@
         'Sioux Falls': [25, 300],
     });
 
+    document.getElementById('nextStep').onclick = function() {
+        graphRenderer.runNextStep();
+    }
+
     async function run() {
-        await dijkstra.runVisualize(minneapolis, graphRenderer.getUpdateFn());
+        await dijkstra.runVisualize(minneapolis, graphRenderer);
         console.log(dijkstra.summarizeResults());
     }
     run();

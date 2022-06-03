@@ -58,16 +58,18 @@ class Dijkstra {
         }
     }
 
-    async runVisualize(node, renderUpdateFn) {
+    /**
+     * @param {Node} node
+     * @param {GraphRenderer} graphRenderer
+     * @returns {Promise<void>}
+     */
+    async runVisualize(node, graphRenderer) {
         this.dist.set(node.name, 0);
-        let sleepTilFn = function() {
-            let result = nextStep;
-            nextStep = false;
-            return result;
-        };
+        await graphRenderer.sleepTil();
         while (this.queue.size > 0) {
             let u = this.getU();
             this.queue.delete(u.name);
+            await graphRenderer.sleepTil();
 
             for (let uEdge of u.edges) {
                 let v = uEdge.destination;
@@ -78,21 +80,21 @@ class Dijkstra {
                     continue;
                 }
                 let potentialDistanceToV = this.dist.get(u.name) + uEdge.weight;
-                renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v,
+                graphRenderer.update(this.graph, this.dist, this.prev, this.queue, u, v,
                     potentialDistanceToV + ' < ' + this.dist.get(v.name));
-                await sleepTil(sleepTilFn);
+                await graphRenderer.sleepTil();
                 if (potentialDistanceToV < this.dist.get(v.name)) {
                     this.dist.set(v.name, potentialDistanceToV);
                     this.prev.set(v.name, u.name);
-                    renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v);
-                    await sleepTil(sleepTilFn);
+                    graphRenderer.update(this.graph, this.dist, this.prev, this.queue, u, v, null);
+                    await graphRenderer.sleepTil();
                 }
-                renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v);
-                await sleepTil(sleepTilFn);
+                graphRenderer.update(this.graph, this.dist, this.prev, this.queue, u, v, null);
+                await graphRenderer.sleepTil();
             }
-            await sleepTil(sleepTilFn);
+            await graphRenderer.sleepTil();
         }
-        renderUpdateFn(this.graph, this.dist, this.prev, this.queue, null, null);
+        graphRenderer.update(this.graph, this.dist, this.prev, this.queue, null, null, null);
     }
 
     /**
