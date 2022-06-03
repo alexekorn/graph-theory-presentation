@@ -6,8 +6,7 @@ class GraphRenderer {
     }
 
     render(graph, locations) {
-        this.locations = locations;
-        let xmlns = "http://www.w3.org/2000/svg";
+        const xmlns = "http://www.w3.org/2000/svg";
         for (let nodeName in locations) {
             const pos = locations[nodeName];
 
@@ -59,6 +58,7 @@ class GraphRenderer {
      * @param {Dijkstra} dijkstra
      * @param {Node|null} u
      * @param {Node|null} v
+     * @param {String|null} distOverride
      */
     update(dijkstra, u, v, distOverride) {
         const graph = dijkstra.graph;
