@@ -20,4 +20,8 @@ class Node {
         this.edges.push(new Edge(this, node, weight));
         node.edges.push(new Edge(node, this, weight))
     }
+
+    getEdges() {
+        return this.edges;
+    }
 }

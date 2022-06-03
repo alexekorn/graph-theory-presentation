@@ -2,45 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Minnebar graph algorithms</title>
     <script src="src/Graph.js"></script>
     <script src="src/Node.js"></script>
     <script src="src/Edge.js"></script>
     <script src="src/Dijkstra.js"></script>
-    <script>
-        let graph = new Graph();
-        let minneapolis = new Node(graph, 'Minneapolis');
-        let rochester = new Node(graph, 'Rochester');
-        let madison = new Node(graph, 'Madison');
-        let desMoines = new Node(graph, 'Des Moines');
-        let chicago = new Node(graph, 'Chicago');
-        let milwaukee = new Node(graph, 'Milwaukee');
-        let stCloud = new Node(graph, 'St Cloud');
-        let fargo = new Node(graph, 'Fargo');
-        let siouxFalls = new Node(graph, 'Sioux Falls');
-        minneapolis.connect(rochester, 88);
-        rochester.connect(madison, 209);
-        madison.connect(minneapolis, 273);
-        rochester.connect(desMoines, 212);
-        desMoines.connect(chicago, 333);
-        madison.connect(chicago, 147);
-        milwaukee.connect(chicago, 92);
-        milwaukee.connect(madison, 79);
-        stCloud.connect(minneapolis, 65);
-        fargo.connect(stCloud, 172);
-        siouxFalls.connect(fargo, 243);
-        siouxFalls.connect(rochester, 237);
-
-        let dijkstra = new Dijkstra(graph);
-
-        dijkstra.run(minneapolis);
-
-        console.log(dijkstra.dist);
-        console.log(dijkstra.prev);
-        console.log(dijkstra.summarizeResults());
-    </script>
+    <script src="src/GraphRenderer.js"></script>
+    <style>
+        .node {
+            fill:lightskyblue;
+            stroke-width:2;
+            stroke:darkblue;
+        }
+        .line {
+            stroke: darkblue;
+        }
+        .u {
+            fill: forestgreen;
+        }
+        .v {
+            fill: orange;
+        }
+        .nodeDist {
+            fill: darkmagenta;
+        }
+        .distConsider {
+            font-weight: bold;
+        }
+        .visited {
+            fill: dimgray;
+        }
+    </style>
 </head>
 <body>
+<div id="graphViz">
+    <svg height="500" width="1000"><g id="graphSvg"></g></svg>
+</div>
+<script>
+    let graph = new Graph();
+    let minneapolis = new Node(graph, 'Minneapolis');
+    let rochester = new Node(graph, 'Rochester');
+    let madison = new Node(graph, 'Madison');
+    let desMoines = new Node(graph, 'Des Moines');
+    let chicago = new Node(graph, 'Chicago');
+    let milwaukee = new Node(graph, 'Milwaukee');
+    let stCloud = new Node(graph, 'St Cloud');
+    let fargo = new Node(graph, 'Fargo');
+    let siouxFalls = new Node(graph, 'Sioux Falls');
+    minneapolis.connect(rochester, 88);
+    rochester.connect(madison, 209);
+    madison.connect(minneapolis, 273);
+    rochester.connect(desMoines, 212);
+    desMoines.connect(chicago, 333);
+    madison.connect(chicago, 147);
+    milwaukee.connect(chicago, 92);
+    milwaukee.connect(madison, 79);
+    stCloud.connect(minneapolis, 65);
+    fargo.connect(stCloud, 172);
+    siouxFalls.connect(fargo, 243);
+    siouxFalls.connect(rochester, 237);
 
+    let dijkstra = new Dijkstra(graph);
+
+    /*
+    dijkstra.run(minneapolis);
+    console.log(dijkstra.summarizeResults());
+    */
+
+    let graphRenderer = new GraphRenderer(graph);
+    graphRenderer.render(graph, {
+        'Minneapolis': [200, 200],
+        'Rochester': [200, 300],
+        'Madison': [500, 300],
+        'Des Moines': [200, 400],
+        'Chicago': [800, 400],
+        'Milwaukee': [800, 300],
+        'St Cloud': [100, 100],
+        'Fargo': [25, 35],
+        'Sioux Falls': [25, 300],
+    });
+
+    async function run() {
+        await dijkstra.runVisualize(minneapolis, graphRenderer.getUpdateFn());
+        console.log(dijkstra.summarizeResults());
+    }
+    run();
+
+</script>
 </body>
 </html>

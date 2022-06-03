@@ -1,5 +1,9 @@
 'use strict';
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 class Dijkstra {
     /**
      * @param {Graph} graph
@@ -31,14 +35,48 @@ class Dijkstra {
                 if (!this.queue.get(v.name)) {
                     continue;
                 }
+                if (this.dist.get(u.name) === Infinity) {
+                    continue;
+                }
                 let potentialDistanceToV = this.dist.get(u.name) + uEdge.weight;
-                if (potentialDistanceToV < this.dist.get(v.name)
-                    && this.dist.get(u.name) !== Infinity) {
+                if (potentialDistanceToV < this.dist.get(v.name)) {
                     this.dist.set(v.name, potentialDistanceToV);
                     this.prev.set(v.name, u.name);
                 }
             }
         }
+    }
+
+    async runVisualize(node, renderUpdateFn) {
+        this.dist.set(node.name, 0);
+        while (this.queue.size > 0) {
+            let u = this.getU();
+            this.queue.delete(u.name);
+
+            for (let uEdge of u.edges) {
+                let v = uEdge.destination;
+                if (!this.queue.get(v.name)) {
+                    continue;
+                }
+                if (this.dist.get(u.name) === Infinity) {
+                    continue;
+                }
+                let potentialDistanceToV = this.dist.get(u.name) + uEdge.weight;
+                renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v,
+                    potentialDistanceToV + ' < ' + this.dist.get(v.name));
+                await sleep(2000);
+                if (potentialDistanceToV < this.dist.get(v.name)) {
+                    this.dist.set(v.name, potentialDistanceToV);
+                    this.prev.set(v.name, u.name);
+                    renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v);
+                    await sleep(1000);
+                }
+                renderUpdateFn(this.graph, this.dist, this.prev, this.queue, u, v);
+                await sleep(1000);
+            }
+            await sleep(2000);
+        }
+        renderUpdateFn(this.graph, this.dist, this.prev, this.queue, null, null);
     }
 
     /**
