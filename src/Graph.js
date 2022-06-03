@@ -2,18 +2,18 @@
 
 class Graph {
     constructor() {
-        this.nodes = [];
+        this.nodes = new Map();
     }
 
     /**
      * @param {Node} node
      */
     registerNode(node) {
-        this.nodes.push(node);
+        this.nodes.set(node.name, node);
     }
 
     /**
-     * @returns {[Node]}
+     * @returns {Map}
      */
     getNodes() {
         return this.nodes;

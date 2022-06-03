@@ -5,12 +5,12 @@ class Dijkstra {
      * @param {Graph} graph
      */
     constructor(graph) {
-        this.graph = name;
+        this.graph = graph;
         this.dist = new Map();
         this.prev = new Map();
         this.queue = new Map();
         // initialize distances and previous
-        for (let node of graph.getNodes()) {
+        for (let [, node] of graph.getNodes()) {
             this.dist.set(node.name, Infinity);
             this.prev.set(node.name, null);
             this.queue.set(node.name, node);
@@ -47,9 +47,7 @@ class Dijkstra {
     getU() {
         /** @var {Node} u */
         let u = null;
-        console.log(this.queue);
         for (let [, potentialU] of this.queue) {
-            console.log(potentialU);
             if (u === null) {
                 u = potentialU;
                 continue;
@@ -60,5 +58,26 @@ class Dijkstra {
             }
         }
         return u;
+    }
+
+    /**
+     * @returns {string}
+     */
+    summarizeResults() {
+        let result = '';
+        for (let [nodeName, distance] of this.dist) {
+            result += nodeName + ': ' + distance + ' mi';
+            let nodeNameIter = nodeName;
+            let prevNodes = [];
+            while (this.prev.get(nodeNameIter)) {
+                nodeNameIter = this.prev.get(nodeNameIter);
+                prevNodes.push(nodeNameIter);
+            }
+            if (prevNodes.length > 0) {
+                result += ', from ';
+            }
+            result += prevNodes.join(", ") + "\n";
+        }
+        return result;
     }
 }
