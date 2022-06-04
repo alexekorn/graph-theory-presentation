@@ -17,8 +17,17 @@ class Node {
      */
     connect(node, weight) {
         // connect both ways
-        this.edges.push(new Edge(this, node, weight));
-        node.edges.push(new Edge(node, this, weight))
+        this.edges.push(new Edge(this, node, weight, null));
+        node.edges.push(new Edge(node, this, weight, null))
+    }
+
+    /**
+     * @param {Node} node
+     * @param {Number} capacity
+     */
+    connectFlow(node, capacity) {
+        // connect one way
+        this.edges.push(new Edge(this, node, null, capacity));
     }
 
     getEdges() {

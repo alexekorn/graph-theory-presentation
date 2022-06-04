@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minnebar graph algorithms</title>
+    <script src="src/Graph.js"></script>
+    <script src="src/Node.js"></script>
+    <script src="src/Edge.js"></script>
+    <script src="src/GraphBuilder.js"></script>
+    <script src="src/EdmondsKarp.js"></script>
+    <script src="src/GraphRenderer.js"></script>
+    <style>
+        .node {
+            fill:lightskyblue;
+            stroke-width:2;
+            stroke:darkblue;
+        }
+        .line {
+            stroke: darkblue;
+        }
+        .u {
+            fill: forestgreen;
+        }
+        .v {
+            fill: orange;
+        }
+        .nodeDist {
+            fill: darkmagenta;
+        }
+        .distConsider {
+            font-weight: bold;
+        }
+        .visited {
+            fill: dimgray;
+        }
+    </style>
+</head>
+<body>
+<div id="consoleOutput" style="float: right; width: 300px; font-family: monospace;"></div>
+<div id="graphViz">
+    <svg height="500" width="1000" id="graphSvg"><g id="graphSvgG"></g></svg>
+</div>
+<button id="nextStep">Next step</button>
+<script>
+    const graph = (new GraphBuilder()).buildFlowGraph();
+
+    const edmondsKarp = new EdmondsKarp(graph);
+
+    const minneapolis = graph.getNodes().get('Minneapolis');
+    const chicago = graph.getNodes().get('Chicago');
+
+    edmondsKarp.run(minneapolis, chicago);
+    console.log(edmondsKarp.summarizeResults());
+
+    /*
+    const graphRenderer = new GraphRenderer(graph);
+    const width = window.innerWidth - 350;
+    const height = window.innerHeight - 100;
+    const svg = document.getElementById('graphSvg');
+    svg.setAttribute('width', String(width));
+    svg.setAttribute('height', String(height));
+    graphRenderer.render(graph, {
+        'Minneapolis': [0.1 * width, 0.1 * height],
+        'Rochester': [0.2 * width, 0.3 * height],
+        'Madison': [0.6 * width, 0.6 * height],
+        'Des Moines': [0.1 * width, 0.9 * height],
+        'Chicago': [0.8 * width, 0.9 * height],
+        'Milwaukee': [0.8 * width, 0.6 * height],
+    });
+
+    document.getElementById('nextStep').onclick = function() {
+        graphRenderer.runNextStep();
+    }
+
+    async function run() {
+        await edmondsKarp.runVisualize(minneapolis, graphRenderer);
+        console.log(edmondsKarp.summarizeResults());
+    }
+    run();
+     */
+
+</script>
+</body>
+</html>

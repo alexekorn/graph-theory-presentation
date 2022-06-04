@@ -33,4 +33,27 @@ class GraphBuilder {
 
         return graph;
     }
+
+    /**
+     * @returns {Graph}
+     */
+    buildFlowGraph() {
+        let graph = new Graph();
+        let minneapolis = new Node(graph, 'Minneapolis');
+        let rochester = new Node(graph, 'Rochester');
+        let madison = new Node(graph, 'Madison');
+        let desMoines = new Node(graph, 'Des Moines');
+        let chicago = new Node(graph, 'Chicago');
+        let milwaukee = new Node(graph, 'Milwaukee');
+        minneapolis.connectFlow(rochester, 350);
+        minneapolis.connectFlow(madison, 200);
+        rochester.connectFlow(madison, 200);
+        rochester.connectFlow(desMoines, 250);
+        desMoines.connectFlow(chicago, 500);
+        madison.connectFlow(chicago, 175);
+        madison.connectFlow(milwaukee, 150);
+        milwaukee.connectFlow(chicago, 100);
+
+        return graph;
+    }
 }
