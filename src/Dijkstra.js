@@ -1,20 +1,5 @@
 'use strict';
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-// TODO https://stackoverflow.com/questions/65915371/how-do-i-make-the-program-wait-for-a-button-click-to-go-to-the-next-loop-iterati
-function sleepTil(shouldCompleteFn) {
-    return new Promise(resolve => setTimeout(sleepTilHelper, 100, resolve, shouldCompleteFn));
-}
-function sleepTilHelper(resolve, shouldCompleteFn) {
-    if (shouldCompleteFn()) {
-        resolve();
-        return;
-    }
-    setTimeout(sleepTilHelper, 100, resolve, shouldCompleteFn);
-}
-
 class Dijkstra {
     /**
      * @param {Graph} graph
