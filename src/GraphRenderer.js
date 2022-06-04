@@ -62,7 +62,7 @@ class GraphRenderer {
      * @param {String|null} distOverride
      * @return {Promise}
      */
-    update(dijkstra, u, v, distOverride = null) {
+    updateDijkstra(dijkstra, u, v, distOverride = null) {
         const graph = dijkstra.graph;
         const dist = dijkstra.dist;
         const queue = dijkstra.queue;

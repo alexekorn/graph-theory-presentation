@@ -42,13 +42,28 @@
     </style>
 </head>
 <body>
-<div id="consoleOutput" class="sideConsole"></div>
+<div class="sideConsole">
+    <div id="consoleOutput">
+
+    </div>
+    <div id="key" class="sideKey">
+        Key
+        <svg height="300" width="300"><g>
+            <circle r="20" class="node u" cx="25" cy="30" />
+            <text x="55" y="32">u: under consideration</text>
+            <circle r="20" class="node v" cx="25" cy="80" />
+            <text x="55" y="82">v: neighbor</text>
+            <circle r="20" class="node visited" cx="25" cy="130" />
+            <text x="55" y="132">visited</text>
+        </g></svg>
+    </div>
+</div>
 <div id="graphViz">
     <svg height="500" width="1000" id="graphSvg"><g id="graphSvgG"></g></svg>
 </div>
 <button id="nextStep">Next step</button>
 <script>
-    const graph = (new GraphBuilder()).buildGraph();
+    const graph = (new GraphBuilder()).buildPathGraph();
 
     const dijkstra = new Dijkstra(graph);
 

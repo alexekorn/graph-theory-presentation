@@ -51,13 +51,13 @@ class Dijkstra {
     async runVisualize(node, graphRenderer) {
         this.dist.set(node.name, 0);
 
-        await graphRenderer.update(this, null, null);
+        await graphRenderer.updateDijkstra(this, null, null);
 
         while (this.queue.size > 0) {
             const u = this.getU();
             this.queue.delete(u.name);
 
-            await graphRenderer.update(this, u, null);
+            await graphRenderer.updateDijkstra(this, u, null);
 
             for (let uEdge of u.edges) {
                 const v = uEdge.destination;
@@ -69,20 +69,20 @@ class Dijkstra {
                 }
                 const potentialDistanceToV = this.dist.get(u.name) + uEdge.weight;
 
-                await graphRenderer.update(this, u, v,
+                await graphRenderer.updateDijkstra(this, u, v,
                     potentialDistanceToV + ' < ' + this.dist.get(v.name));
 
                 if (potentialDistanceToV < this.dist.get(v.name)) {
                     this.dist.set(v.name, potentialDistanceToV);
                     this.prev.set(v.name, u.name);
 
-                    await graphRenderer.update(this, u, v, null);
+                    await graphRenderer.updateDijkstra(this, u, v, null);
                 }
             }
             // u is null now because we're done with it
-            await graphRenderer.update(this, null, null);
+            await graphRenderer.updateDijkstra(this, null, null);
         }
-        await graphRenderer.update(this, null, null);
+        await graphRenderer.updateDijkstra(this, null, null);
     }
 
     /**

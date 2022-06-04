@@ -7,7 +7,7 @@ class GraphBuilder {
     /**
      * @returns {Graph}
      */
-    buildGraph() {
+    buildPathGraph() {
         const graph = new Graph();
         const minneapolis = new Node(graph, 'Minneapolis');
         const rochester = new Node(graph, 'Rochester');
