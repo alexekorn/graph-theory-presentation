@@ -110,7 +110,12 @@ class GraphRenderer {
         for (let edge of this.getAllEdges(source)) {
             document.getElementById(this.getDomIdForEdgeText(edge)).innerHTML
                 = edge.flow + ' / ' + edge.capacity
-            document.getElementById(this.getDomIdForEdge(edge)).setAttribute('class', 'line');
+            let cls = 'line';
+            if (edge.flow === edge.capacity) {
+                cls += ' filled';
+            }
+            document.getElementById(this.getDomIdForEdge(edge))
+                .setAttribute('class', cls);
             //edgeDom.setAttribute('class', 'line');
         }
 
