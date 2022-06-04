@@ -14,15 +14,15 @@ class GraphRenderer {
             const el = document.createElementNS(xmlns, 'circle');
             el.setAttribute('cx', pos[0]);
             el.setAttribute('cy', pos[1]);
-            el.setAttribute('r', 20);
+            el.setAttribute('r', '20');
             el.setAttribute('class', 'node');
             el.setAttribute('id', nodeName);
             this.el.appendChild(el);
 
             // node distance
             const elDist = document.createElementNS(xmlns, 'text');
-            elDist.setAttribute('x', pos[0] + 20);
-            elDist.setAttribute('y', pos[1] - 20);
+            elDist.setAttribute('x', String(pos[0] + 20));
+            elDist.setAttribute('y', String(pos[1] - 20));
             elDist.setAttribute('id', nodeName + 'Dist');
             elDist.setAttribute('class', 'nodeDist');
             elDist.innerHTML = 'Inf';
@@ -45,12 +45,11 @@ class GraphRenderer {
                 lineEl.setAttribute('class', 'line');
                 this.el.appendChild(lineEl);
                 const lineWeightEl = document.createElementNS(xmlns, 'text');
-                lineWeightEl.setAttribute('x', (x1 + x2) / 2 + 5);
-                lineWeightEl.setAttribute('y', (y1 + y2) / 2 - 5);
+                lineWeightEl.setAttribute('x', String((x1 + x2) / 2 + 5));
+                lineWeightEl.setAttribute('y', String((y1 + y2) / 2 - 5));
                 lineWeightEl.innerHTML = edge.weight;
                 this.el.appendChild(lineWeightEl);
             }
-
         }
     }
 
@@ -59,6 +58,7 @@ class GraphRenderer {
      * @param {Node|null} u
      * @param {Node|null} v
      * @param {String|null} distOverride
+     * @return {Promise}
      */
     update(dijkstra, u, v, distOverride = null) {
         const graph = dijkstra.graph;
@@ -93,9 +93,10 @@ class GraphRenderer {
         }
         document.getElementById('consoleOutput').innerHTML
             = dijkstra.summarizeResults().replaceAll(/\n/g, '<br><br>');
+        return this.sleepTilNextStep();
     }
 
-    sleepTil() {
+    sleepTilNextStep() {
         return new Promise(resolve => this.runNextStep = resolve);
     }
 }
