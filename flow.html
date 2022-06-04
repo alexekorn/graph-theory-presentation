@@ -33,6 +33,10 @@
         .visited {
             fill: dimgray;
         }
+        .path {
+            stroke-width: 5px;
+            stroke: orangered;
+        }
     </style>
 </head>
 <body>
@@ -49,35 +53,37 @@
     const minneapolis = graph.getNodes().get('Minneapolis');
     const chicago = graph.getNodes().get('Chicago');
 
+    /*
     edmondsKarp.run(minneapolis, chicago);
     console.log(edmondsKarp.summarizeResults());
+     */
 
-    /*
     const graphRenderer = new GraphRenderer(graph);
-    const width = window.innerWidth - 350;
+    const width = window.innerWidth - 100;
     const height = window.innerHeight - 100;
     const svg = document.getElementById('graphSvg');
     svg.setAttribute('width', String(width));
     svg.setAttribute('height', String(height));
     graphRenderer.render(graph, {
         'Minneapolis': [0.1 * width, 0.1 * height],
-        'Rochester': [0.2 * width, 0.3 * height],
-        'Madison': [0.6 * width, 0.6 * height],
+        'Rochester': [0.2 * width, 0.5 * height],
+        'Madison': [0.5 * width, 0.6 * height],
         'Des Moines': [0.1 * width, 0.9 * height],
         'Chicago': [0.8 * width, 0.9 * height],
         'Milwaukee': [0.8 * width, 0.6 * height],
     });
 
     document.getElementById('nextStep').onclick = function() {
+        if (!graphRenderer.runNextStep) {
+            return;
+        }
         graphRenderer.runNextStep();
     }
 
     async function run() {
-        await edmondsKarp.runVisualize(minneapolis, graphRenderer);
-        console.log(edmondsKarp.summarizeResults());
+        await edmondsKarp.runVisualize(minneapolis, chicago, graphRenderer);
     }
     run();
-     */
 
 </script>
 </body>

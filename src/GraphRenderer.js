@@ -25,7 +25,7 @@ class GraphRenderer {
             elDist.setAttribute('y', String(pos[1] - 20));
             elDist.setAttribute('id', nodeName + 'Dist');
             elDist.setAttribute('class', 'nodeDist');
-            elDist.innerHTML = 'Inf';
+            elDist.innerHTML = nodeName;
             this.el.appendChild(elDist);
 
             const node = graph.getNodes().get(nodeName);
@@ -43,8 +43,10 @@ class GraphRenderer {
                 lineEl.setAttribute('x2', x2);
                 lineEl.setAttribute('y2', y2);
                 lineEl.setAttribute('class', 'line');
+                lineEl.setAttribute('id', this.getDomIdForEdge(edge));
                 this.el.appendChild(lineEl);
                 const lineWeightEl = document.createElementNS(xmlns, 'text');
+                lineWeightEl.setAttribute('id', this.getDomIdForEdgeText(edge));
                 lineWeightEl.setAttribute('x', String((x1 + x2) / 2 + 5));
                 lineWeightEl.setAttribute('y', String((y1 + y2) / 2 - 5));
                 lineWeightEl.innerHTML = edge.weight;
@@ -94,6 +96,64 @@ class GraphRenderer {
         document.getElementById('consoleOutput').innerHTML
             = dijkstra.summarizeResults().replaceAll(/\n/g, '<br><br>');
         return this.sleepTilNextStep();
+    }
+
+    /**
+     * @param {EdmondsKarp} edmondsKarp
+     * @param {Node} source
+     * @param {[Edge]} path
+     * @return {Promise}
+     */
+    updateEdmondsKarp(edmondsKarp, source, path, maxFlow) {
+        const graph = edmondsKarp.graph;
+
+        for (let edge of this.getAllEdges(source)) {
+            document.getElementById(this.getDomIdForEdgeText(edge)).innerHTML
+                = edge.flow + ' / ' + edge.capacity
+            document.getElementById(this.getDomIdForEdge(edge)).setAttribute('class', 'line');
+            //edgeDom.setAttribute('class', 'line');
+        }
+
+        if (path) {
+            for (let edge of path) {
+                document.getElementById(this.getDomIdForEdge(edge)).setAttribute('class', 'line path');
+                document.getElementById(this.getDomIdForEdgeText(edge)).innerHTML
+                    = '+' + maxFlow + '; ' + edge.flow + ' / ' + edge.capacity
+            }
+        }
+
+        //document.getElementById('consoleOutput').innerHTML
+            //= edmondsKarp.summarizeResults().replaceAll(/\n/g, '<br><br>');
+        return this.sleepTilNextStep();
+    }
+
+    /**
+     * @param {Node} source
+     * @returns {[Edge]}
+     */
+    getAllEdges(source) {
+        let queue = [];
+        let allEdges = [];
+        queue.push(source);
+        while (queue.length > 0) {
+            const node = queue.pop();
+            for (const edge of node.edges) {
+                allEdges.push(edge);
+                const dest = edge.destination;
+                if (dest !== source) {
+                    queue.push(dest);
+                }
+            }
+        }
+        return allEdges;
+    }
+
+    getDomIdForEdge(edge) {
+        return 'edge' + edge.source.name + '-' + edge.destination.name
+    }
+
+    getDomIdForEdgeText(edge) {
+        return this.getDomIdForEdge(edge) + 'Text';
     }
 
     sleepTilNextStep() {

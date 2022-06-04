@@ -57,8 +57,8 @@
     const width = window.innerWidth - 350;
     const height = window.innerHeight - 100;
     const svg = document.getElementById('graphSvg');
-    svg.setAttribute('width', width);
-    svg.setAttribute('height', height);
+    svg.setAttribute('width', String(width));
+    svg.setAttribute('height', String(height));
     graphRenderer.render(graph, {
         'Minneapolis': [0.3 * width, 0.3 * height],
         'Rochester': [0.3 * width, 0.5 * height],
